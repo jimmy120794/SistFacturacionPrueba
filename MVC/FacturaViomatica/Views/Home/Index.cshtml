@@ -1,0 +1,198 @@
+﻿@model FacturaViomatica.Models.DB.Cliente
+
+@{
+    ViewData["Title"] = "Facturación";
+    var total = ViewBag.FacturaDetalles.Count;
+}
+
+<div class="text-center">
+    <h1 class="display-3">Factura</h1>
+</div>
+
+<div class="container">
+    <form asp-action="SetFactura">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="row">
+            <div class=" from-group col-md-6">
+                <label><b>Facturar a</b></label>
+                <input asp-for="Nombre" type="text" value="Nombre Cliente" class="form-control">
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+
+                <input asp-for="Empresa" type="text" value="Nombre Empresa" class="form-control">
+                <span asp-validation-for="Empresa" class="text-danger"></span>
+
+                <input asp-for="DirEmpresa" type="text" value="Dirección Empresa" class="form-control">
+                <span asp-validation-for="DirEmpresa" class="text-danger"></span>
+
+                <input asp-for="TelEmpresa" type="text" value="Tel Empresa" class="form-control">
+                <span asp-validation-for="TelEmpresa" class="text-danger"></span>
+            </div>
+
+            <div class=" form-group col-md-6">
+                <label><b>Enviar a</b></label>
+                <input asp-for="Nombre" type="text" value="Nombre Cliente" class="form-control">
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+
+                <input asp-for="Empresa" type="text" value="Nombre Empresa" class="form-control">
+                <span asp-validation-for="Empresa" class="text-danger"></span>
+
+                <input asp-for="DirEmpresa" type="text" value="Dirección Empresa" class="form-control">
+                <span asp-validation-for="DirEmpresa" class="text-danger"></span>
+
+                <input asp-for="TelEmpresa" type="text" value="Tel Empresa" class="form-control">
+                <span asp-validation-for="TelEmpresa" class="text-danger"></span>
+        
+            </div>
+        </div>
+        <br />
+        <table class="table" id="tablaprueba">
+            <thead>
+                <tr>
+                    <th>
+                        Código
+                    </th>
+                    <th>
+                        Descripción
+                    </th>
+                    <th>
+                        Cant.
+                    </th>
+                    <th>
+                        Precio
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="table-data">
+                @for (var i = 0; i < total; i++)
+                {
+                    <tr>
+                        <td>
+                            @ViewBag.FacturaDetalles[i].Id
+                        </td>
+                        <td>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form>
+                                        <div class="form-group">
+                                            <select id="mySelectProduct"  name=" optionlist" class="form-control" onchange="myFunction()">
+                                                @foreach (var product in ViewBag.AllProducts)
+                                                {
+                                                    <option>@product.Nombre</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                        <td id="cant_value">
+                            @ViewBag.FacturaDetalles[i].Cantidad
+                        </td>
+                        <td id="precio_value">
+                           @ViewBag.FacturaDetalles[i].Precio
+                        </td>
+                        <td>
+                            <p id=@i>-</p>
+                        </td>
+                        <!--<td>
+                            <a asp-action="Create" class="btn btn-danger">+ NUEVA FILA</a>|
+                        </td>-->
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+        <div class="form-group">
+            <button type="button" class="btn btn-danger mr-2" onclick="agregarFila()">+ NUEVA FILA</button>
+            <button type="button" class="btn btn-warning" onclick="eliminarFila()">- QUITAR FILA</button>
+            <!--TO_DO: Me falto hacer la logica para guardar nuevos registros :(.-->
+        </div>
+        <br />
+        <div class="text-right" id="Total_end">
+            <b>TOTAL: $</b>  0.00
+            <p>Elegir un producto para proceder a clacular los valores...</p>
+        </div>
+        <br/>
+        <div class="row">
+           
+            <div class="form-group">
+                <input type="submit" value="Facturar" class="btn btn-primary" />
+            </div>
+        </div>
+        <br />
+    </form>
+</div>
+
+<script>
+    function myFunction() {
+        // Definimos el array donde guardaremos los datos...
+        var data = [];
+
+        // Obtenemos la variable con las filas de tbody...
+        var rows = document.getElementById('table-data').rows;
+
+        // Recorremos las filas y añadimos al array el valor de las celdas con los offset 1 (capítulo) y 3 (porcentaje)...
+        for (var i = 0; i < rows.length; i++) {
+            data.push([rows[i].cells[2].innerHTML, rows[i].cells[3].innerHTML]);
+            console.log(rows[i].cells[2].innerHTML, rows[i].cells[3].innerHTML);
+        }
+
+        // Ya tenemos los datos guardados, ahora hacemos lo que queramos con ellos...
+        var cleanStr = String(data[0]).replace(/ /g, "").split(',')
+        var cant = parseInt(cleanStr[0].replace(/ /g, ""))
+        var price =  parseFloat(cleanStr[1].replace(/ /g, ""))
+        var total = cant*price
+
+        var totalEnd = 0
+        for (var i = 0; i < data.length; i++) {
+            totalEnd += total
+        }
+        document.getElementById("Total_end").innerHTML = "<b>TOTAL: $ </b>"  + totalEnd;
+       
+        var x = document.getElementById("mySelectProduct").value;
+        
+        for (var i = 0; i < 100; i++) {
+            strId = i.toString();
+            if (document.getElementById(strId) !== null) {
+                document.getElementById(strId).innerHTML = "$ " + total;
+               
+            }else{
+                 console.log('[INDEX OUT], NOT EXISTS')
+            }
+           
+        }
+
+    }
+
+    const agregarFila = () => {
+        document.getElementById('tablaprueba').insertRow(-1).innerHTML = '<td>' + Math.floor((Math.random() * 99) + 1) + '</td><td>-</td><td>-</td><td>-</td><td>-</td>'
+    }
+
+    const eliminarFila = () => {
+      const table = document.getElementById('tablaprueba')
+      const rowCount = table.rows.length
+  
+      if (rowCount <= 1)
+        alert('No se puede eliminar el encabezado')
+      else
+        table.deleteRow(rowCount -1)
+    }
+
+
+
+
+</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
+
+
+
+

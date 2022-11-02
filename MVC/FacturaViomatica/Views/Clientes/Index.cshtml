@@ -1,0 +1,59 @@
+﻿@model IEnumerable<FacturaViomatica.Models.DB.Cliente>
+
+@{
+    ViewData["Title"] = "Mantenimiento";
+}
+
+<h1>Mantenimiento</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nuevo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Empresa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DirEmpresa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TelEmpresa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fecha_nac)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DirEmpresa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TelEmpresa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecha_nac)
+            </td>
+            <td>
+                <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">Editar</a> |
+                <a asp-action="Details" class="btn btn-primary" asp-route-id="@item.Id">Ver</a> |
+                <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
