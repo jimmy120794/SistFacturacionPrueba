@@ -10,7 +10,7 @@
 
 }
 
-<!--TO_DO: Me falto hacer unas cuantas validaciones al agregar o eliminar <n> cantidad de lineas a la tabla :(, por falta de tiempo...-->
+<!--TO_DO: Por favor, avisarme la retroalimentacion respectiva y status de la oportunidad laboral :)-->
 
 <hr size="7px" style="color:#1b6fc7">
 <div class="container">
@@ -324,11 +324,9 @@
 
         var producto_select_new = document.getElementById("newProduct" + rowCount).value;
         var new_price = producto_select_new.split('_')[1]
-        console.log(new_cant, producto_select_new)
         document.getElementById("newPrice" + rowCount).innerHTML = "$ " + parseInt(new_price);
 
         //NEW TOTAL
-        console.log(new_cant, new_price)
         var new_total = parseInt(new_cant) * parseInt(new_price)
         document.getElementById("totalNew" + rowCount).innerHTML = "$ " + new_total;
 
@@ -362,9 +360,17 @@
         document.getElementById("totalNew" + rowCount).innerHTML = "$ " + new_total_now;
 
         //NEW TOTAL END NOW
-        var new_total_end_now = document.getElementById("Total_end").innerHTML
-        document.getElementById("Total_end").innerHTML = parseInt(new_total_end_now) + new_total_now;
+       
+        var new_total_end_now = 0
+        var rows = document.getElementById('tablaprueba').rows;
+        for (var i = 1; i < rows.length ; i++) {
+            var price_update_now = rows[i].cells[4].innerHTML
+            var price_update_now2 = price_update_now.split("$ ")[1]
+            var price_update_now3 = price_update_now2.split("<")[0]
+            new_total_end_now += parseInt(price_update_now3)
+        }
 
+        document.getElementById("Total_end").innerHTML = new_total_end_now;
     }
 
 </script>
