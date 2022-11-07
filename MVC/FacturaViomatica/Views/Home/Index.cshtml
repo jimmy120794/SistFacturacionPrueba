@@ -230,16 +230,19 @@
     //Agregar nueva fila a la tabla de detalle de factura
 
     const agregarFila = () => {
+        const table = document.getElementById('tablaprueba')
+        const rowCount = table.rows.length
 
         document.getElementById('tablaprueba').insertRow(-1).innerHTML += `
         <tr>
-            <td id="newCode">--</td>
+            <td id="newCode` + rowCount + `">--</td>
+        ` + `
             <td>
                 <div class="row">
                     <div class="col-md-12">
                         <form>
                             <div class="form-group">
-                                <select name=" optionlist" id="newProduct" class="form-control" onchange="newCalc()">
+                                <select name="optionlist" id="newProduct` + rowCount + `" class="form-control" onchange="newCalc()">
                                     @foreach (var product in ViewBag.AllProducts)
                                     {
                                         <option>@product.Nombre@separador@product.Precio</option>
@@ -250,16 +253,16 @@
                     </div>
                 </div>
             </td>
-            <td><input type="number" id="newCant" min="1" step="1" value=1 onchange="newCalcCant()" class="form-control"></td>
-            <td id="newPrice">-</td>
-            <td><p id="totalNew">-</p></td>
+            <td><input type="number" id="newCant` + rowCount + `" min="1" step="1" value=1 onchange="newCalcCant()" class="form-control"></td>
+            <td id="newPrice` + rowCount + `">-</td>
+            <td><p id="totalNew` + rowCount + `">-</p></td>
 
         </tr>
 
 
         `
 
-        document.getElementById('newCode').innerHTML = Math.floor((Math.random() * 99) + 1)
+        document.getElementById('newCode' + rowCount).innerHTML = Math.floor((Math.random() * 99) + 1)
     }
 
     //Elimina un fila de la tabla de detalles de factura
@@ -310,20 +313,24 @@
 
     function newCalc() {
 
+        const table = document.getElementById('tablaprueba')
+        const rowCount = table.rows.length - 1
+
         //NEW CANT
 
-        var new_cant = document.getElementById("newCant").value
+        var new_cant = document.getElementById("newCant" + rowCount).value
 
         //NEW PRICE
 
-        var producto_select_new = document.getElementById("newProduct").value;
+        var producto_select_new = document.getElementById("newProduct" + rowCount).value;
         var new_price = producto_select_new.split('_')[1]
-        document.getElementById("newPrice").innerHTML = "$ " + parseInt(new_price);
+        console.log(new_cant, producto_select_new)
+        document.getElementById("newPrice" + rowCount).innerHTML = "$ " + parseInt(new_price);
 
         //NEW TOTAL
-
+        console.log(new_cant, new_price)
         var new_total = parseInt(new_cant) * parseInt(new_price)
-        document.getElementById("totalNew").innerHTML = "$ " + new_total;
+        document.getElementById("totalNew" + rowCount).innerHTML = "$ " + new_total;
 
 
         //NEW TOTAL END
@@ -337,19 +344,22 @@
 
     function newCalcCant() {
 
+        const table = document.getElementById('tablaprueba')
+        const rowCount = table.rows.length - 1
+
         //NEW CANT NOW
 
-        var new_cant_now = document.getElementById("newCant").value
+        var new_cant_now = document.getElementById("newCant" + rowCount).value
 
         //NEW PRICE NOW
 
-        var producto_select_new = document.getElementById("newProduct").value;
+        var producto_select_new = document.getElementById("newProduct" + rowCount).value;
         var new_price_now = producto_select_new.split('_')[1]
 
         //NEW TOTAL NOW
 
         var new_total_now = parseInt(new_cant_now) * parseInt(new_price_now)
-        document.getElementById("totalNew").innerHTML = "$ " + new_total_now;
+        document.getElementById("totalNew" + rowCount).innerHTML = "$ " + new_total_now;
 
         //NEW TOTAL END NOW
         var new_total_end_now = document.getElementById("Total_end").innerHTML

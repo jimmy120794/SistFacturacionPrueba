@@ -1,12 +1,14 @@
-﻿<Properties StartupConfiguration="{9176B8CF-BC0A-4B38-AF37-A2AFDCF23621}|Default" NuGet.AddPackagesDialog.IncludePrerelease="True">
+﻿<Properties NuGet.AddPackagesDialog.IncludePrerelease="True" StartupConfiguration="{9176B8CF-BC0A-4B38-AF37-A2AFDCF23621}|Default">
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/FacturaCabecerasController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.FacturaViomatica PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Views/Home/Index.cshtml">
     <Files>
-      <File FileName="Views/Home/Index.cshtml" Line="172" Column="63" IsPinned="True" />
+      <File FileName="Views/Home/Index.cshtml" Line="155" Column="17" IsPinned="True" />
       <File FileName="Controllers/FacturaDetallesController.cs" Line="44" Column="1" IsPinned="True" />
       <File FileName="Models/DB/Cliente.cs" Line="18" Column="11" />
       <File FileName="Controllers/ClientesController.cs" Line="18" Column="32" />
@@ -25,7 +27,6 @@
           <Node name="FacturaViomatica" expanded="True">
             <Node name="FacturaViomatica" expanded="True">
               <Node name="Controllers" expanded="True" />
-              <Node name="Migrations" expanded="True" />
               <Node name="Models" expanded="True">
                 <Node name="DB" expanded="True" />
               </Node>
@@ -36,18 +37,6 @@
                 <Node name="Home" expanded="True" />
                 <Node name="Productoes" expanded="True" />
               </Node>
-              <Node name="wwwroot" expanded="True">
-                <Node name="css" expanded="True" />
-                <Node name="lib" expanded="True">
-                  <Node name="bootstrap" expanded="True">
-                    <Node name="dist" expanded="True">
-                      <Node name="js" expanded="True">
-                        <Node name="bootstrap.esm.js" expanded="True" />
-                      </Node>
-                    </Node>
-                  </Node>
-                </Node>
-              </Node>
             </Node>
           </Node>
         </State>
@@ -57,6 +46,4 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.ItemProperties.FacturaViomatica PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
