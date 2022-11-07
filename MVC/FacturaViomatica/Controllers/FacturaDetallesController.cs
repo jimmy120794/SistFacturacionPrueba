@@ -60,7 +60,7 @@ namespace FacturaViomatica.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,IdFactCab,IdProducto,Cantidad")] FacturaDetalle facturaDetalle)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid || !ModelState.IsValid)
             {
                 _context.Add(facturaDetalle);
                 await _context.SaveChangesAsync();
@@ -94,14 +94,14 @@ namespace FacturaViomatica.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IdFactCab,IdProducto,Cantidad","Precio")] FacturaDetalle facturaDetalle)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,IdFactCab,IdProducto,Cantidad")] FacturaDetalle facturaDetalle)
         {
             if (id != facturaDetalle.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid || !ModelState.IsValid)
             {
                 try
                 {

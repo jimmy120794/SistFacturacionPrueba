@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FacturaViomatica.Models.DB;
+using Newtonsoft.Json.Linq;
+using System.Globalization;
 
 namespace FacturaViomatica.Controllers
 {
@@ -58,14 +60,20 @@ namespace FacturaViomatica.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,IdCliente,Fecha,FechaVence")] FacturaCabecera facturaCabecera)
         {
-            if (ModelState.IsValid)
+            
+            bool isValid = ModelState.IsValid;
+            
+            if (!isValid)
             {
                 _context.Add(facturaCabecera);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdCliente"] = new SelectList(_context.Clientes, "Id", "Id", facturaCabecera.IdCliente);
-            return View(facturaCabecera);
+            else
+            {
+                ViewData["IdCliente"] = new SelectList(_context.Clientes, "Id", "Id", facturaCabecera.IdCliente);
+                return View(facturaCabecera);
+            }
         }
 
         // GET: FacturaCabeceras/Edit/5
@@ -97,7 +105,7 @@ namespace FacturaViomatica.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {

@@ -3,28 +3,52 @@
 @{
     ViewData["Title"] = "Facturación";
     var total = ViewBag.FacturaDetalles.Count;
+    var ident_price = "price_";
+    var ident_product = "product_";
+    var ident_cant = "cant_";
+    var separador = "_";
+
 }
 
-<div class="text-center">
-    <h1 class="display-3">Factura</h1>
-</div>
+<!--TO_DO: Me falto hacer unas cuantas validaciones al agregar o eliminar <n> cantidad de lineas a la tabla :(, por falta de tiempo...-->
 
+<hr size="7px" style="color:#1b6fc7">
 <div class="container">
     <form asp-action="SetFactura">
+
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
+
+        <div class="row">
+            <div class=" from-group col-md-6">
+                <div class="text-center">
+                    <h1 class="display-3" style="color:#1b6fc7"><b>Factura</b></h1>
+                </div>
+            </div>
+
+            <div class=" from-group col-md-6">
+                <label style="width: 49%;">Fecha: <input type="date" id="fechaActual" value="" class="form-control"> </label>
+                <label style="width: 50%;">Vence: <input type="date" id="fechaActual2" value="" class="form-control"> </label>
+                <label style="width: 100%;">Factura #</b> <input type="text" id="factCode" value="" class="form-control"></label>
+            </div>
+
+        </div>
+        <br /><br />
         <div class="row">
             <div class=" from-group col-md-6">
                 <label><b>Facturar a</b></label>
                 <input asp-for="Nombre" type="text" value="Nombre Cliente" class="form-control">
                 <span asp-validation-for="Nombre" class="text-danger"></span>
 
+                <label></label>
                 <input asp-for="Empresa" type="text" value="Nombre Empresa" class="form-control">
                 <span asp-validation-for="Empresa" class="text-danger"></span>
 
+                <label></label>
                 <input asp-for="DirEmpresa" type="text" value="Dirección Empresa" class="form-control">
                 <span asp-validation-for="DirEmpresa" class="text-danger"></span>
 
+                <label></label>
                 <input asp-for="TelEmpresa" type="text" value="Tel Empresa" class="form-control">
                 <span asp-validation-for="TelEmpresa" class="text-danger"></span>
             </div>
@@ -34,15 +58,18 @@
                 <input asp-for="Nombre" type="text" value="Nombre Cliente" class="form-control">
                 <span asp-validation-for="Nombre" class="text-danger"></span>
 
+                <label></label>
                 <input asp-for="Empresa" type="text" value="Nombre Empresa" class="form-control">
                 <span asp-validation-for="Empresa" class="text-danger"></span>
 
+                <label></label>
                 <input asp-for="DirEmpresa" type="text" value="Dirección Empresa" class="form-control">
                 <span asp-validation-for="DirEmpresa" class="text-danger"></span>
 
+                <label></label>
                 <input asp-for="TelEmpresa" type="text" value="Tel Empresa" class="form-control">
                 <span asp-validation-for="TelEmpresa" class="text-danger"></span>
-        
+
             </div>
         </div>
         <br />
@@ -59,10 +86,10 @@
                         Cant.
                     </th>
                     <th>
-                        Precio
+                        Precio ($)
                     </th>
                     <th>
-                        Total
+                        Total ($)
                     </th>
                 </tr>
             </thead>
@@ -78,10 +105,10 @@
                                 <div class="col-md-12">
                                     <form>
                                         <div class="form-group">
-                                            <select id="mySelectProduct"  name=" optionlist" class="form-control" onchange="myFunction()">
+                                            <select id=@ident_product@i name=" optionlist" class="form-control" onchange="selectProduct()">
                                                 @foreach (var product in ViewBag.AllProducts)
                                                 {
-                                                    <option>@product.Nombre</option>
+                                                    <option>@product.Nombre@separador@product.Precio</option>
                                                 }
                                             </select>
                                         </div>
@@ -89,18 +116,23 @@
                                 </div>
                             </div>
                         </td>
-                        <td id="cant_value">
+                        <td id=@ident_cant@i>
                             @ViewBag.FacturaDetalles[i].Cantidad
                         </td>
-                        <td id="precio_value">
-                           @ViewBag.FacturaDetalles[i].Precio
+                        <td id=@ident_price@i>
+
+                            @foreach (var product in ViewBag.AllProducts)
+                            {
+                                @if (@ViewBag.FacturaDetalles[i].IdProducto == product.Id)
+                                {
+                                    @product.Precio
+
+                                }
+                            }
                         </td>
                         <td>
-                            <p id=@i>-</p>
+                            <p id=@i>$ -</p>
                         </td>
-                        <!--<td>
-                            <a asp-action="Create" class="btn btn-danger">+ NUEVA FILA</a>|
-                        </td>-->
                     </tr>
                 }
             </tbody>
@@ -109,89 +141,224 @@
         <div class="form-group">
             <button type="button" class="btn btn-danger mr-2" onclick="agregarFila()">+ NUEVA FILA</button>
             <button type="button" class="btn btn-warning" onclick="eliminarFila()">- QUITAR FILA</button>
-            <!--TO_DO: Me falto hacer la logica para guardar nuevos registros :(.-->
         </div>
         <br />
-        <div class="text-right" id="Total_end">
-            <b>TOTAL: $</b>  0.00
-            <p>Elegir un producto para proceder a clacular los valores...</p>
+        <div class="text-right" style="margin-right: 15px;">
+            <b>TOTAL: $</b>  <label id="Total_end">0.00</label>
         </div>
-        <br/>
-        <div class="row">
-           
+        <br />
+        @*<div class="row">
+
             <div class="form-group">
                 <input type="submit" value="Facturar" class="btn btn-primary" />
             </div>
-        </div>
+        </div>*@
         <br />
     </form>
 </div>
 
+<div class="text-center">
+    <span>El monto de la factura no incluye el impuesto  sobre las ventas</span>
+</div>
+
 <script>
-    function myFunction() {
-        // Definimos el array donde guardaremos los datos...
+
+    //Al seleccionar un producto del comboBox
+
+    function selectProduct() {
+
         var data = [];
 
-        // Obtenemos la variable con las filas de tbody...
         var rows = document.getElementById('table-data').rows;
 
-        // Recorremos las filas y añadimos al array el valor de las celdas con los offset 1 (capítulo) y 3 (porcentaje)...
         for (var i = 0; i < rows.length; i++) {
             data.push([rows[i].cells[2].innerHTML, rows[i].cells[3].innerHTML]);
-            console.log(rows[i].cells[2].innerHTML, rows[i].cells[3].innerHTML);
         }
 
-        // Ya tenemos los datos guardados, ahora hacemos lo que queramos con ellos...
-        var cleanStr = String(data[0]).replace(/ /g, "").split(',')
-        var cant = parseInt(cleanStr[0].replace(/ /g, ""))
-        var price =  parseFloat(cleanStr[1].replace(/ /g, ""))
-        var total = cant*price
-
+        var totalTemp = 0
         var totalEnd = 0
+
         for (var i = 0; i < data.length; i++) {
-            totalEnd += total
+            totalTemp = 0
+            var cleanStr = String(data[i]).replace(/ /g, "").split(',')
+            var cant = parseInt(cleanStr[0].replace(/ /g, ""))
+
         }
-        document.getElementById("Total_end").innerHTML = "<b>TOTAL: $ </b>"  + totalEnd;
-       
-        var x = document.getElementById("mySelectProduct").value;
-        
+
         for (var i = 0; i < 100; i++) {
-            strId = i.toString();
-            if (document.getElementById(strId) !== null) {
-                document.getElementById(strId).innerHTML = "$ " + total;
-               
-            }else{
-                 console.log('[INDEX OUT], NOT EXISTS')
+
+
+            //Precio item
+
+            strId1 = "price_"+i.toString();
+
+            //Total item
+            var strId2 = i.toString();
+
+            if (document.getElementById(strId1) !== null) {
+
+                var strId3 = "product_" + i.toString()
+
+                if (document.getElementById(strId3) !== null) {
+                    var x = document.getElementById(strId3).value;
+                    var price = x.split('_')[1]
+
+                    document.getElementById(strId1).innerHTML = "$ " + price
+
+
+                    if (document.getElementById(strId2) !== null) {
+
+                        var cleanStr = String(data[i]).replace(/ /g, "").split(',')
+                        var cant = parseInt(cleanStr[0].replace(/ /g, ""))
+                        var totalItem = cant * price
+                        totalEnd += totalItem
+
+                        document.getElementById(strId2).innerHTML = "$ " + totalItem;
+
+                    }
+
+                }
+
             }
-           
+
         }
+
+        document.getElementById("Total_end").innerHTML =  totalEnd;
 
     }
+
+    //Agregar nueva fila a la tabla de detalle de factura
 
     const agregarFila = () => {
-        document.getElementById('tablaprueba').insertRow(-1).innerHTML = '<td>' + Math.floor((Math.random() * 99) + 1) + '</td><td>-</td><td>-</td><td>-</td><td>-</td>'
+
+        document.getElementById('tablaprueba').insertRow(-1).innerHTML += `
+        <tr>
+            <td id="newCode">--</td>
+            <td>
+                <div class="row">
+                    <div class="col-md-12">
+                        <form>
+                            <div class="form-group">
+                                <select name=" optionlist" id="newProduct" class="form-control" onchange="newCalc()">
+                                    @foreach (var product in ViewBag.AllProducts)
+                                    {
+                                        <option>@product.Nombre@separador@product.Precio</option>
+                                    }
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </td>
+            <td><input type="number" id="newCant" min="1" step="1" value=1 onchange="newCalcCant()" class="form-control"></td>
+            <td id="newPrice">-</td>
+            <td><p id="totalNew">-</p></td>
+
+        </tr>
+
+
+        `
+
+        document.getElementById('newCode').innerHTML = Math.floor((Math.random() * 99) + 1)
     }
+
+    //Elimina un fila de la tabla de detalles de factura
 
     const eliminarFila = () => {
-      const table = document.getElementById('tablaprueba')
-      const rowCount = table.rows.length
-  
-      if (rowCount <= 1)
-        alert('No se puede eliminar el encabezado')
-      else
-        table.deleteRow(rowCount -1)
+        const table = document.getElementById('tablaprueba')
+        const rowCount = table.rows.length
+
+        if (rowCount <= 1)
+            alert('No se puede eliminar el encabezado')
+        else
+
+            if (document.getElementById('tablaprueba') != null) {
+                var rows = document.getElementById('tablaprueba').rows;
+                if (rows.length > 0) {
+                    var price_delete_now = rows[rowCount - 1].cells[4].innerHTML
+                    var price_delete_now2 = price_delete_now.split("$ ")[1]
+                    var price_delete_now3 = price_delete_now2.split("<")[0]
+
+                    var new_total_end_now2 = document.getElementById("Total_end").innerHTML
+                    var delete_sale = parseInt(new_total_end_now2) - parseInt(price_delete_now3)
+                    document.getElementById("Total_end").innerHTML = delete_sale;
+                }
+                table.deleteRow(rowCount - 1)
+            }
+
     }
 
+    //Inicializador de fechas y codigo de factura
+
+    window.onload = function () {
+        var fecha = new Date();
+        var mes = fecha.getMonth() + 1;
+        var dia = fecha.getDate();
+        var ano = fecha.getFullYear();
+        if (dia < 10)
+            dia = '0' + dia;
+        if (mes < 10)
+            mes = '0' + mes
+
+        var aleatorio_code = Math.round(Math.random() * 999999);
+        document.getElementById('fechaActual').value = ano + "-" + mes + "-" + dia;
+        document.getElementById('fechaActual2').value = ano + "-" + mes + "-" + dia;
+        document.getElementById('factCode').value = aleatorio_code;
+
+    }
+    //Calculos al seleccionar un producto del comboBox de la nueva linea agregada
+
+    function newCalc() {
+
+        //NEW CANT
+
+        var new_cant = document.getElementById("newCant").value
+
+        //NEW PRICE
+
+        var producto_select_new = document.getElementById("newProduct").value;
+        var new_price = producto_select_new.split('_')[1]
+        document.getElementById("newPrice").innerHTML = "$ " + parseInt(new_price);
+
+        //NEW TOTAL
+
+        var new_total = parseInt(new_cant) * parseInt(new_price)
+        document.getElementById("totalNew").innerHTML = "$ " + new_total;
 
 
+        //NEW TOTAL END
+        var new_total_end = document.getElementById("Total_end").innerHTML
+        document.getElementById("Total_end").innerHTML = parseInt(new_total_end) + new_total;
+
+
+    }
+
+    //Calculos cambiar la cantidad de productos requeridos en la nueva linea agregada
+
+    function newCalcCant() {
+
+        //NEW CANT NOW
+
+        var new_cant_now = document.getElementById("newCant").value
+
+        //NEW PRICE NOW
+
+        var producto_select_new = document.getElementById("newProduct").value;
+        var new_price_now = producto_select_new.split('_')[1]
+
+        //NEW TOTAL NOW
+
+        var new_total_now = parseInt(new_cant_now) * parseInt(new_price_now)
+        document.getElementById("totalNew").innerHTML = "$ " + new_total_now;
+
+        //NEW TOTAL END NOW
+        var new_total_end_now = document.getElementById("Total_end").innerHTML
+        document.getElementById("Total_end").innerHTML = parseInt(new_total_end_now) + new_total_now;
+
+    }
 
 </script>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-    }
 
 
 

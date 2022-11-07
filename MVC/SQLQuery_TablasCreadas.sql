@@ -7,7 +7,8 @@ CREATE TABLE Cliente(
 	nombre varchar(90),
 	empresa varchar(90),
 	dir_empresa varchar(90),
-	tel_empresa varchar(90) 
+	tel_empresa varchar(90),
+	-- fecha_nac Date,
 );
 
 
@@ -34,12 +35,10 @@ CREATE TABLE Factura_detalle(
 	idFactCab int not null,
 	idProducto int not null,
 	cantidad int,
-	precio float,
 
 	CONSTRAINT fk_Factura_cabecera FOREIGN KEY (idFactCab) REFERENCES Factura_cabecera (id),
 	CONSTRAINT fk_Producto FOREIGN KEY (idProducto) REFERENCES Producto (id),
 );
-
 
 
 

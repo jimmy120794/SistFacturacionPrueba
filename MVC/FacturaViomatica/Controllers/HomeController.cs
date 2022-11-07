@@ -23,14 +23,13 @@ namespace FacturaViomatica.Controllers
         {
             ViewBag.Clientes = _context.Clientes.ToList(); // select * from FacturaCabecera
             ViewBag.FacturaDetalles = _context.FacturaDetalles.ToList();
-
             ViewBag.AllProducts = _context.Productos.ToList();
-            Console.WriteLine("ya fue mira ok22222!!");
+
+
             return View();
         }
         public bool ProductoExists(string NameProducto)
         {
-            Console.WriteLine("ya fue mira ok!!");
             return _context.Clientes.Any(e => e.Nombre == NameProducto);
         }
 
@@ -67,7 +66,6 @@ namespace FacturaViomatica.Controllers
         /*public async Task<IActionResult> Index()
         {
             var Clientes = _context.Clientes; // select * from FacturaCabecera
-            Console.WriteLine("ya -->");
             return View(await Clientes.ToListAsync());
         }*/
 

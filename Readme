@@ -1,8 +1,21 @@
 * Prueba sistema de facturacion inicial/base...Jimmy Celly
 
 
-* Se adjunta carpeta de proyecto .NET CORE MVC C# (Microsoft Visual Studio 2022) , y query para creacion de BD en Sql Server 2019
+* Se adjunta carpeta de proyecto .NET CORE MVC C# (Microsoft Visual Studio 2022) , y query para creacion de BD en Sql Server 2019 si lo requieren.
 
 * Adjunta tambien capturas de pantalla de programa corriendo....
 
 * Proyecto este en el directorio llamado \SistFacturacionPrueba\MVC\FacturaViomatica
+
+
+******** MIGRAR TABLAS  DE .NET 6 A DB SQL SERVER *******
+
+* Recomendaciones: Asegurar de terne instalado dotnet y dotnet-ef
+
+-> Crear las migraciones de tablas y crea Db en SQL SERVER 2019
+
+dotnet ef migrations add InitialCreate  
+
+-> Actualiza todos los cambios en la DB SQL SERVER 2019
+ 
+dotnet ef database update  

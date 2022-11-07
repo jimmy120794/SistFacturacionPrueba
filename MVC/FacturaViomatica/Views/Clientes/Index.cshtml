@@ -24,9 +24,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.TelEmpresa)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Fecha_nac)
-            </th>
+            </th>*@
             <th></th>
         </tr>
     </thead>
@@ -45,9 +45,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.TelEmpresa)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.Fecha_nac)
-            </td>
+            </td>*@
             <td>
                 <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id">Editar</a> |
                 <a asp-action="Details" class="btn btn-primary" asp-route-id="@item.Id">Ver</a> |

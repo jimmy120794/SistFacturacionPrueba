@@ -15,7 +15,7 @@ namespace FacturaViomatica.Models.DB
         public string? Empresa { get; set; }
         public string? DirEmpresa { get; set; }
         public string? TelEmpresa { get; set; }
-        public DateTime? Fecha_nac { get; set; }
+        //public DateTime? Fecha_nac { get; set; }
 
         public virtual ICollection<FacturaCabecera> FacturaCabeceras { get; set; }
     }
