@@ -16,3 +16,14 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.inputSelectCantProduct {
+    width:100%;
+}
+.tdCantProduct {
+    width: 10%;
+}
+.sizeLabelTextTotal {
+    font-size: 40px;
+    color: #3a45cb;
+}

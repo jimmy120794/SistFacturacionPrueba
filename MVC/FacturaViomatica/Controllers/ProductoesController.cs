@@ -87,6 +87,7 @@ namespace FacturaViomatica.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Precio")] Producto producto)
         {
+            Console.WriteLine("precio -->" + producto.Precio);
             if (id != producto.Id)
             {
                 return NotFound();

@@ -1,23 +1,19 @@
 ﻿<Properties StartupConfiguration="{9176B8CF-BC0A-4B38-AF37-A2AFDCF23621}|Default" NuGet.AddPackagesDialog.IncludePrerelease="True">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Views/Home/Index.cshtml">
+  <MonoDevelop.Ide.Workbench ActiveDocument="wwwroot/lib/jquery-validation/dist/jquery.validate.js">
     <Files>
-      <File FileName="Views/Home/Index.cshtml" Line="16" Column="24" IsPinned="True" />
-      <File FileName="Controllers/FacturaDetallesController.cs" Line="44" Column="1" IsPinned="True" />
-      <File FileName="Models/DB/Cliente.cs" Line="18" Column="11" />
-      <File FileName="Controllers/ClientesController.cs" Line="18" Column="32" />
-      <File FileName="Views/Clientes/Create.cshtml" Line="35" Column="1" />
-      <File FileName="Views/Clientes/Delete.cshtml" Line="38" Column="1" />
-      <File FileName="Views/Clientes/Details.cshtml" Line="37" Column="1" />
-      <File FileName="Views/Clientes/Edit.cshtml" Line="36" Column="1" />
-      <File FileName="Views/Clientes/Index.cshtml" Line="27" Column="1" />
-      <File FileName="Controllers/HomeController.cs" Line="68" Column="79" />
-      <File FileName="Program.cs" Line="34" Column="1" />
-      <File FileName="Controllers/FacturaCabecerasController.cs" Line="64" Column="47" />
+      <File FileName="Views/Home/Index.cshtml" Line="138" Column="84" IsPinned="True" />
+      <File FileName="wwwroot/css/site.css" Line="28" Column="20" IsPinned="True" />
+      <File FileName="Models/DB/Producto.cs" Line="22" Column="21" />
+      <File FileName="Controllers/HomeController.cs" Line="24" Column="1" />
+      <File FileName="Views/Productoes/Create.cshtml" Line="22" Column="41" />
+      <File FileName="Views/Productoes/Edit.cshtml" Line="23" Column="40" />
+      <File FileName="wwwroot/lib/jquery-validation/dist/jquery.validate.js" Line="1445" Column="54" />
+      <File FileName="Controllers/ProductoesController.cs" Line="90" Column="63" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="FacturaViomatica" expanded="True">
+          <Node name="FacturaViomatica" expanded="True" selected="True">
             <Node name="FacturaViomatica" expanded="True">
               <Node name="Controllers" expanded="True" />
               <Node name="Models" expanded="True">
@@ -39,11 +35,11 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.FacturaViomatica PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.FacturaViomatica PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
 </Properties>

@@ -6,23 +6,23 @@
     var ident_price = "price_";
     var ident_product = "product_";
     var ident_cant = "cant_";
-    var separador = "_";
+    var dollarSymbol = "$";
 
 }
 
 <!--TO_DO: Por favor, avisarme la retroalimentacion respectiva y status de la oportunidad laboral :)-->
-
-<hr size="7px" style="color:#1b6fc7">
 <div class="container">
     <form asp-action="SetFactura">
 
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
 
+        <hr size="7px" style="color:#3a45cb">
+
         <div class="row">
             <div class=" from-group col-md-6">
                 <div class="text-center">
-                    <h1 class="display-3" style="color:#1b6fc7"><b>Factura</b></h1>
+                    <h1 class="display-3" style="color:#3a45cb"><b>Factura</b></h1>
                 </div>
             </div>
 
@@ -33,7 +33,7 @@
             </div>
 
         </div>
-        <br /><br />
+        <hr size="7px" style="color:#3a45cb"><br />
         <div class="row">
             <div class=" from-group col-md-6">
                 <label><b>Facturar a</b></label>
@@ -71,8 +71,8 @@
                 <span asp-validation-for="TelEmpresa" class="text-danger"></span>
 
             </div>
-        </div>
-        <br />
+        </div><br />
+        <hr size="7px" style="color:#3a45cb"><br />
         <table class="table" id="tablaprueba">
             <thead>
                 <tr>
@@ -86,10 +86,10 @@
                         Cant.
                     </th>
                     <th>
-                        Precio ($)
+                        Precio
                     </th>
                     <th>
-                        Total ($)
+                        Total
                     </th>
                 </tr>
             </thead>
@@ -98,7 +98,7 @@
                 {
                     <tr>
                         <td>
-                            @ViewBag.FacturaDetalles[i].Id
+                            <p>@ViewBag.FacturaDetalles[i].Id</p>
                         </td>
                         <td>
                             <div class="row">
@@ -106,9 +106,19 @@
                                     <form>
                                         <div class="form-group">
                                             <select id=@ident_product@i name=" optionlist" class="form-control" onchange="selectProduct()">
+                                                @*<option value="" disabled selected>Seleccione producto...</option>*@
                                                 @foreach (var product in ViewBag.AllProducts)
                                                 {
-                                                    <option>@product.Nombre@separador@product.Precio</option>
+                                                    @if (@ViewBag.FacturaDetalles[i].IdProducto == product.Id)
+                                                    {
+                                                        <option value=@product.Precio selected>@product.Nombre</option>
+
+                                                    }
+                                                    @if (@ViewBag.FacturaDetalles[i].IdProducto != product.Id)
+                                                    {
+                                                        <option value=@product.Precio>@product.Nombre</option>
+                                                    }
+
                                                 }
                                             </select>
                                         </div>
@@ -125,13 +135,13 @@
                             {
                                 @if (@ViewBag.FacturaDetalles[i].IdProducto == product.Id)
                                 {
-                                    @product.Precio
+                                    @dollarSymbol @product.Precio.ToString("#.##");
 
                                 }
                             }
                         </td>
                         <td>
-                            <p id=@i>$ -</p>
+                            <p id=@i>$ 0</p>
                         </td>
                     </tr>
                 }
@@ -143,16 +153,19 @@
             <button type="button" class="btn btn-warning" onclick="eliminarFila()">- QUITAR FILA</button>
         </div>
         <br />
-        <div class="text-right" style="margin-right: 15px;">
-            <b>TOTAL: $</b>  <label id="Total_end">0.00</label>
+        <div class="row" style="margin-right: 15px;">
+            <div class=" form-group col-md-6"></div>
+            <div class=" form-group col-md-6" style="text-align: end;">
+                <b>Total: </b> <label>$ </label> <label class="sizeLabelTextTotal" id="Total_end"> 0.00</label>
+            </div>
         </div>
         <br />
         @*<div class="row">
 
-            <div class="form-group">
-                <input type="submit" value="Facturar" class="btn btn-primary" />
-            </div>
-        </div>*@
+                <div class="form-group">
+                    <input type="submit" value="Facturar" class="btn btn-primary" />
+                </div>
+            </div>*@
         <br />
     </form>
 </div>
@@ -161,59 +174,61 @@
     <span>El monto de la factura no incluye el impuesto  sobre las ventas</span>
 </div>
 
-<script>
+@section Scripts {
+    <script type="text/javascript">
 
-    //Al seleccionar un producto del comboBox
+        //Al seleccionar un producto del comboBox
 
-    function selectProduct() {
+        function selectProduct() {
 
-        var data = [];
+            var data = [];
 
-        var rows = document.getElementById('table-data').rows;
+            var rows = document.getElementById('table-data').rows;
 
-        for (var i = 0; i < rows.length; i++) {
-            data.push([rows[i].cells[2].innerHTML, rows[i].cells[3].innerHTML]);
-        }
+            for (var i = 0; i < rows.length; i++) {
+                data.push([rows[i].cells[2].innerHTML, rows[i].cells[3].innerHTML]);
+            }
 
-        var totalTemp = 0
-        var totalEnd = 0
+            var totalTemp = 0
+            var totalEnd = 0
 
-        for (var i = 0; i < data.length; i++) {
-            totalTemp = 0
-            var cleanStr = String(data[i]).replace(/ /g, "").split(',')
-            var cant = parseInt(cleanStr[0].replace(/ /g, ""))
+            for (var i = 0; i < data.length; i++) {
+                totalTemp = 0
+                var cleanStr = String(data[i]).replace(/ /g, "").split(',')
+                var cant = parseInt(cleanStr[0].replace(/ /g, ""))
 
-        }
+            }
 
-        for (var i = 0; i < 100; i++) {
-
-
-            //Precio item
-
-            strId1 = "price_"+i.toString();
-
-            //Total item
-            var strId2 = i.toString();
-
-            if (document.getElementById(strId1) !== null) {
-
-                var strId3 = "product_" + i.toString()
-
-                if (document.getElementById(strId3) !== null) {
-                    var x = document.getElementById(strId3).value;
-                    var price = x.split('_')[1]
-
-                    document.getElementById(strId1).innerHTML = "$ " + price
+            for (var i = 0; i < 100; i++) {
 
 
-                    if (document.getElementById(strId2) !== null) {
+                //Precio item
 
-                        var cleanStr = String(data[i]).replace(/ /g, "").split(',')
-                        var cant = parseInt(cleanStr[0].replace(/ /g, ""))
-                        var totalItem = cant * price
-                        totalEnd += totalItem
+                strId1 = "price_"+i.toString();
 
-                        document.getElementById(strId2).innerHTML = "$ " + totalItem;
+                //Total item
+                var strId2 = i.toString();
+
+                if (document.getElementById(strId1) !== null) {
+
+                    var strId3 = "product_" + i.toString()
+
+                    if (document.getElementById(strId3) !== null) {
+
+                        var price = parseFloat(document.getElementById(strId3).value);
+                        document.getElementById(strId1).innerHTML = "$ " + parseFloat(price)
+
+
+                        if (document.getElementById(strId2) !== null) {
+
+                            var cleanStr = String(data[i]).replace(/ /g, "").split(',')
+                            var cant = parseInt(cleanStr[0].replace(/ /g, ""))
+                            var totalItem = cant * price
+                            totalEnd += totalItem
+
+                            document.getElementById(strId2).innerHTML = "$ " + totalItem.toLocaleString("en");
+
+                        }
 
                     }
 
@@ -221,159 +236,193 @@
 
             }
 
+            document.getElementById("Total_end").innerHTML = totalEnd.toLocaleString("en");
+
         }
 
-        document.getElementById("Total_end").innerHTML =  totalEnd;
+        //Agregar nueva fila a la tabla de detalle de factura
 
-    }
+        const agregarFila = () => {
+            const table = document.getElementById('tablaprueba')
+            const rowCount = table.rows.length
 
-    //Agregar nueva fila a la tabla de detalle de factura
-
-    const agregarFila = () => {
-        const table = document.getElementById('tablaprueba')
-        const rowCount = table.rows.length
-
-        document.getElementById('tablaprueba').insertRow(-1).innerHTML += `
-        <tr>
-            <td id="newCode` + rowCount + `">--</td>
-        ` + `
-            <td>
-                <div class="row">
-                    <div class="col-md-12">
-                        <form>
-                            <div class="form-group">
-                                <select name="optionlist" id="newProduct` + rowCount + `" class="form-control" onchange="newCalc()">
-                                    @foreach (var product in ViewBag.AllProducts)
-                                    {
-                                        <option>@product.Nombre@separador@product.Precio</option>
-                                    }
-                                </select>
-                            </div>
-                        </form>
+            document.getElementById('tablaprueba').insertRow(-1).innerHTML += `
+            <tr>
+                <td id="newCode` + rowCount + `"><p>--</p></td>
+            ` + `
+                <td>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form>
+                                <div class="form-group">
+                                    <select name="optionlist" id="newProduct` + rowCount + `" class="form-control" onchange="newCalc(` + rowCount + `)">
+                                        <option value="" disabled selected>Seleccione producto...</option>
+                                        @foreach (var product in ViewBag.AllProducts)
+                                        {
+                                            <option value=@product.Precio>@product.Nombre</option>
+                                        }
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            </td>
-            <td><input type="number" id="newCant` + rowCount + `" min="1" step="1" value=1 onchange="newCalcCant()" class="form-control"></td>
-            <td id="newPrice` + rowCount + `">-</td>
-            <td><p id="totalNew` + rowCount + `">-</p></td>
+                </td>
+                <td class="tdCantProduct"><input type="number" id="newCant` + rowCount + `" min="1" step="1" value=1 onchange="newCalcCant(` + rowCount + `)" class="form-control inputSelectCantProduct"></td>
+                <td id="newPrice` + rowCount + `"><p>$ 0</p></td>
+                <td><p id="totalNew` + rowCount + `">$ 0</p></td>
 
-        </tr>
+            </tr>
+            `
 
+            document.getElementById('newCode' + rowCount).innerHTML = Math.floor((Math.random() * 99) + 1) + rowCount.toString()
+        }
 
-        `
+        //Elimina un fila de la tabla de detalles de factura
 
-        document.getElementById('newCode' + rowCount).innerHTML = Math.floor((Math.random() * 99) + 1)
-    }
+        const eliminarFila = () => {
+            const table = document.getElementById('tablaprueba')
+            const rowCount = table.rows.length
 
-    //Elimina un fila de la tabla de detalles de factura
+            if (rowCount <= 1)
+                alert('No se puede eliminar el encabezado')
+            else
 
-    const eliminarFila = () => {
-        const table = document.getElementById('tablaprueba')
-        const rowCount = table.rows.length
+                if (document.getElementById('tablaprueba') != null) {
+                    var rows = document.getElementById('tablaprueba').rows;
+                    var price_delete_now = rows[rowCount-1].cells[4].innerHTML
 
-        if (rowCount <= 1)
-            alert('No se puede eliminar el encabezado')
-        else
-
-            if (document.getElementById('tablaprueba') != null) {
-                var rows = document.getElementById('tablaprueba').rows;
-                if (rows.length > 0) {
-                    var price_delete_now = rows[rowCount - 1].cells[4].innerHTML
                     var price_delete_now2 = price_delete_now.split("$ ")[1]
                     var price_delete_now3 = price_delete_now2.split("<")[0]
 
                     var new_total_end_now2 = document.getElementById("Total_end").innerHTML
-                    var delete_sale = parseInt(new_total_end_now2) - parseInt(price_delete_now3)
-                    document.getElementById("Total_end").innerHTML = delete_sale;
+                    var new_total_end_now2_format = new_total_end_now2.replace(/[^\d,]/g, "").replace(",", "")
+                    var price_delete_now3_format = price_delete_now3.replace(/[^\d,]/g, "").replace(",", "")
+                    var delete_sale = parseFloat(new_total_end_now2_format) - parseFloat(price_delete_now3_format)
+
+                    document.getElementById("Total_end").innerHTML = delete_sale.toLocaleString("en");
+
+                    table.deleteRow(rowCount-1)
                 }
-                table.deleteRow(rowCount - 1)
-            }
 
-    }
-
-    //Inicializador de fechas y codigo de factura
-
-    window.onload = function () {
-        var fecha = new Date();
-        var mes = fecha.getMonth() + 1;
-        var dia = fecha.getDate();
-        var ano = fecha.getFullYear();
-        if (dia < 10)
-            dia = '0' + dia;
-        if (mes < 10)
-            mes = '0' + mes
-
-        var aleatorio_code = Math.round(Math.random() * 999999);
-        document.getElementById('fechaActual').value = ano + "-" + mes + "-" + dia;
-        document.getElementById('fechaActual2').value = ano + "-" + mes + "-" + dia;
-        document.getElementById('factCode').value = aleatorio_code;
-
-    }
-    //Calculos al seleccionar un producto del comboBox de la nueva linea agregada
-
-    function newCalc() {
-
-        const table = document.getElementById('tablaprueba')
-        const rowCount = table.rows.length - 1
-
-        //NEW CANT
-
-        var new_cant = document.getElementById("newCant" + rowCount).value
-
-        //NEW PRICE
-
-        var producto_select_new = document.getElementById("newProduct" + rowCount).value;
-        var new_price = producto_select_new.split('_')[1]
-        document.getElementById("newPrice" + rowCount).innerHTML = "$ " + parseInt(new_price);
-
-        //NEW TOTAL
-        var new_total = parseInt(new_cant) * parseInt(new_price)
-        document.getElementById("totalNew" + rowCount).innerHTML = "$ " + new_total;
-
-
-        //NEW TOTAL END
-        var new_total_end = document.getElementById("Total_end").innerHTML
-        document.getElementById("Total_end").innerHTML = parseInt(new_total_end) + new_total;
-
-
-    }
-
-    //Calculos cambiar la cantidad de productos requeridos en la nueva linea agregada
-
-    function newCalcCant() {
-
-        const table = document.getElementById('tablaprueba')
-        const rowCount = table.rows.length - 1
-
-        //NEW CANT NOW
-
-        var new_cant_now = document.getElementById("newCant" + rowCount).value
-
-        //NEW PRICE NOW
-
-        var producto_select_new = document.getElementById("newProduct" + rowCount).value;
-        var new_price_now = producto_select_new.split('_')[1]
-
-        //NEW TOTAL NOW
-
-        var new_total_now = parseInt(new_cant_now) * parseInt(new_price_now)
-        document.getElementById("totalNew" + rowCount).innerHTML = "$ " + new_total_now;
-
-        //NEW TOTAL END NOW
-       
-        var new_total_end_now = 0
-        var rows = document.getElementById('tablaprueba').rows;
-        for (var i = 1; i < rows.length ; i++) {
-            var price_update_now = rows[i].cells[4].innerHTML
-            var price_update_now2 = price_update_now.split("$ ")[1]
-            var price_update_now3 = price_update_now2.split("<")[0]
-            new_total_end_now += parseInt(price_update_now3)
         }
 
-        document.getElementById("Total_end").innerHTML = new_total_end_now;
-    }
+        //Inicializador de fechas y codigo de factura
 
-</script>
+        window.onload = function () {
+            var fecha = new Date();
+            var mes = fecha.getMonth() + 1;
+            var dia = fecha.getDate();
+            var ano = fecha.getFullYear();
+            if (dia < 10)
+                dia = '0' + dia;
+            if (mes < 10)
+                mes = '0' + mes
+
+            var aleatorio_code = Math.round(Math.random() * 999999);
+            document.getElementById('fechaActual').value = ano + "-" + mes + "-" + dia;
+            document.getElementById('fechaActual2').value = ano + "-" + mes + "-" + dia;
+            document.getElementById('factCode').value = aleatorio_code;
+
+            //LOAD TOTAL
+
+            var total_end_now = 0
+            var rows = document.getElementById('tablaprueba').rows;
+
+            for (var i = 1; i < rows.length; i++) {
+
+                var cant_now_str = String(rows[i].cells[2].innerHTML).replace(/ /g, "")
+                var cant_now = parseInt(cant_now_str)
+
+                var price_update_now_str = String(rows[i].cells[3].innerHTML).replace(/ /g, "")
+                @*var price_update_now = parseFloat(price_update_now_str.split("$")[1].replace(",", "."))*@
+                var price_update_now = parseFloat(price_update_now_str.split("$")[1])
+
+                var totalItem = cant_now * price_update_now
+
+                var strId2 = (i-1).toString();
+
+                if (document.getElementById(strId2) !== null) {
+
+                    total_end_now += totalItem
+                    document.getElementById(strId2).innerHTML = "$ " + totalItem.toLocaleString("en");
+
+                }
+
+            }
+
+            document.getElementById("Total_end").innerHTML = total_end_now.toLocaleString("en");
+
+
+        }
+
+        //Calculos al seleccionar un producto del comboBox de la nueva linea agregada
+
+        function newCalc(rowNumber) {
+
+            //NEW CANT
+
+            var new_cant = document.getElementById("newCant" + rowNumber).value
+
+            //NEW PRICE
+
+            var new_price = document.getElementById("newProduct" + rowNumber).value;
+            document.getElementById("newPrice" + rowNumber).innerHTML = "$ " + parseInt(new_price);
+
+            //NEW TOTAL
+            var new_total = parseInt(new_cant) * parseInt(new_price)
+            document.getElementById("totalNew" + rowNumber).innerHTML = "$ " + new_total.toLocaleString("en");
+
+
+            //NEW TOTAL END
+            var new_total_end = document.getElementById("Total_end").innerHTML
+            var new_total_end_format = new_total_end.replace(/[^\d,]/g, "").replace(",", "")
+
+            document.getElementById("Total_end").innerHTML = (parseFloat(parseInt(new_total_end_format)) + new_total).toLocaleString("en");
+
+
+        }
+
+        //Calculos cambiar la cantidad de productos requeridos en la nueva linea agregada
+
+        function newCalcCant(rowNumber) {
+
+            //NEW CANT NOW
+
+            var new_cant_now = document.getElementById("newCant" + rowNumber).value
+
+            //NEW PRICE NOW
+
+            var new_price_now = document.getElementById("newProduct" + rowNumber).value;
+
+
+            //NEW TOTAL NOW
+
+            var new_total_now = parseInt(new_cant_now) * parseInt(new_price_now)
+            if (!isNaN(new_total_now)) {
+                document.getElementById("totalNew" + rowNumber).innerHTML = "$ " + new_total_now.toLocaleString("en");
+            }
+
+            //NEW TOTAL END NOW
+
+            var new_total_end_now = 0
+            var rows = document.getElementById('tablaprueba').rows;
+            for (var i = 1; i < rows.length ; i++) {
+                var price_update_now = rows[i].cells[4].innerHTML
+                var price_update_now_format = price_update_now.replace(",", "")
+                var price_update_now2 = price_update_now_format.split("$ ")[1]
+                var price_update_now3 = price_update_now2.split("<")[0]
+                new_total_end_now += parseInt(price_update_now3)
+            }
+
+            if (!isNaN(new_total_end_now)) {
+                document.getElementById("Total_end").innerHTML = parseFloat(new_total_end_now).toLocaleString("en");
+            }
+        }
+
+    </script>
+}
+
+
 
 
 

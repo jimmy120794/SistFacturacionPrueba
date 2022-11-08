@@ -32,7 +32,7 @@ namespace FacturaViomatica.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     nombre = table.Column<string>(type: "varchar(90)", unicode: false, maxLength: 90, nullable: true),
-                    precio = table.Column<double>(type: "float", nullable: true)
+                    precio = table.Column<decimal>(type: "money", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,8 +46,8 @@ namespace FacturaViomatica.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     idCliente = table.Column<int>(type: "int", nullable: false),
-                    fecha = table.Column<DateTime>(type: "date", nullable: true),
-                    fecha_vence = table.Column<DateTime>(type: "date", nullable: true)
+                    fecha = table.Column<DateTime>(type: "date", nullable: false),
+                    fecha_vence = table.Column<DateTime>(type: "date", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,8 +67,7 @@ namespace FacturaViomatica.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     idFactCab = table.Column<int>(type: "int", nullable: false),
                     idProducto = table.Column<int>(type: "int", nullable: false),
-                    cantidad = table.Column<int>(type: "int", nullable: true),
-                    Precio = table.Column<double>(type: "float", nullable: true)
+                    cantidad = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

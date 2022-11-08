@@ -69,11 +69,11 @@ namespace FacturaViomatica.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime?>("Fecha")
+                    b.Property<DateTime>("Fecha")
                         .HasColumnType("date")
                         .HasColumnName("fecha");
 
-                    b.Property<DateTime?>("FechaVence")
+                    b.Property<DateTime>("FechaVence")
                         .HasColumnType("date")
                         .HasColumnName("fecha_vence");
 
@@ -109,9 +109,6 @@ namespace FacturaViomatica.Migrations
                         .HasColumnType("int")
                         .HasColumnName("idProducto");
 
-                    b.Property<double?>("Precio")
-                        .HasColumnType("float");
-
                     b.HasKey("Id");
 
                     b.HasIndex("IdFactCab");
@@ -136,8 +133,8 @@ namespace FacturaViomatica.Migrations
                         .HasColumnType("varchar(90)")
                         .HasColumnName("nombre");
 
-                    b.Property<double?>("Precio")
-                        .HasColumnType("float")
+                    b.Property<decimal>("Precio")
+                        .HasColumnType("money")
                         .HasColumnName("precio");
 
                     b.HasKey("Id");
