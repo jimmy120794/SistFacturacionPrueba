@@ -207,6 +207,7 @@
                 strId1 = "price_"+i.toString();
 
                 //Total item
+
                 var strId2 = i.toString();
 
                 if (document.getElementById(strId1) !== null) {
@@ -215,8 +216,15 @@
 
                     if (document.getElementById(strId3) !== null) {
 
-                        var price = parseFloat(document.getElementById(strId3).value);
-                        document.getElementById(strId1).innerHTML = "$ " + parseFloat(price)
+                        var price = parseFloat(document.getElementById(strId3).value.replace(",", "."));
+
+                        if (price.toString().split(".")[1].length === 1) {
+
+                            document.getElementById(strId1).innerHTML = "$ " + parseFloat(price).toFixed(2).toLocaleString("en");
+                        } else {
+
+                            document.getElementById(strId1).innerHTML = "$ " + price.toLocaleString("en");
+                        }
 
 
                         if (document.getElementById(strId2) !== null) {
@@ -224,9 +232,50 @@
                             var cleanStr = String(data[i]).replace(/ /g, "").split(',')
                             var cant = parseInt(cleanStr[0].replace(/ /g, ""))
                             var totalItem = cant * price
+
                             totalEnd += totalItem
 
-                            document.getElementById(strId2).innerHTML = "$ " + totalItem.toLocaleString("en");
+                            if (!isNaN(totalItem)) { //Cifra no es NaN
+
+                                if (!Number.isInteger(totalItem)) {//Cifra no es entero
+
+                                    //Cifras exactas $ sin digitos de ctvs
+
+                                    if (totalItem.toLocaleString("en").split(".")[1] === undefined) {
+                                        document.getElementById(strId2).innerHTML = "$ " + totalItem.toLocaleString("en") + ".00";
+
+                                    } else { //Cifras $ con digitos de ctvs
+
+                                        //Cifras con 1 digito de ctv
+
+                                        if (totalItem.toLocaleString("en").split(".")[1].length === 1) {
+                                            document.getElementById(strId2).innerHTML = "$ " + totalItem.toLocaleString("en") + "0";
+
+                                            //Cifras con 2 digitos de ctvs
+
+                                        } else if (totalItem.toLocaleString("en").split(".")[1].length === 2) {
+                                            document.getElementById(strId2).innerHTML = "$ " + totalItem.toLocaleString("en");
+                                        }
+
+                                    }
+
+                                } else { //Cifra es entero
+
+                                    //Tres cifras exactas $
+
+                                    if (totalItem.toString().length == 3) {
+                                        document.getElementById(strId2).innerHTML = "$ " + parseFloat(totalItem).toFixed(2).toLocaleString("en");
+                                    }
+                                    //Cuatro o mas cifras exactas $
+
+                                    else if (totalItem.toString().length >= 4) {
+                                        document.getElementById(strId2).innerHTML = "$ " + totalItem.toLocaleString("en") + ".00";
+                                    }
+
+                                }
+                            }
+
+                            
 
                         }
 
@@ -236,7 +285,46 @@
 
             }
 
-            document.getElementById("Total_end").innerHTML = totalEnd.toLocaleString("en");
+            if (!isNaN(totalEnd)) { //Cifra no es NaN
+
+                if (!Number.isInteger(totalEnd)) {//Cifra no es entero
+
+                    //Cifras exactas $ sin digitos de ctvs
+
+                    if (totalEnd.toLocaleString("en").split(".")[1] === undefined) {
+                        document.getElementById("Total_end").innerHTML = totalEnd.toLocaleString("en") + ".00";
+
+                    } else { //Cifras $ con digitos de ctvs
+
+                        //Cifras con 1 digito de ctv
+
+                        if (totalEnd.toLocaleString("en").split(".")[1].length === 1) {
+                            document.getElementById("Total_end").innerHTML = totalEnd.toLocaleString("en") + "0";
+
+                            //Cifras con 2 digitos de ctvs
+
+                        } else if (totalEnd.toLocaleString("en").split(".")[1].length === 2) {
+                            document.getElementById("Total_end").innerHTML = totalEnd.toLocaleString("en");
+                        }
+
+                    }
+
+                } else { //Cifra es entero
+
+                    //Tres cifras exactas $
+
+                    if (totalEnd.toString().length == 3) {
+                        document.getElementById("Total_end").innerHTML = parseFloat(totalEnd).toFixed(2).toLocaleString("en");
+                    }
+                    //Cuatro o mas cifras exactas $
+
+                    else if (totalEnd.toString().length >= 4) {
+                        document.getElementById("Total_end").innerHTML = totalEnd.toLocaleString("en") + ".00";
+                    }
+
+                }
+            }
+           
 
         }
 
@@ -289,17 +377,60 @@
 
                 if (document.getElementById('tablaprueba') != null) {
                     var rows = document.getElementById('tablaprueba').rows;
-                    var price_delete_now = rows[rowCount-1].cells[4].innerHTML
+
+                    var price_delete_now = rows[rowCount - 1].cells[4].innerHTML
 
                     var price_delete_now2 = price_delete_now.split("$ ")[1]
-                    var price_delete_now3 = price_delete_now2.split("<")[0]
+                    var price_delete_now3 = price_delete_now2.split("<")[0].replace(',', '').replace(/[^0-9,.]*/, '').replace(',', '');
 
-                    var new_total_end_now2 = document.getElementById("Total_end").innerHTML
-                    var new_total_end_now2_format = new_total_end_now2.replace(/[^\d,]/g, "").replace(",", "")
-                    var price_delete_now3_format = price_delete_now3.replace(/[^\d,]/g, "").replace(",", "")
-                    var delete_sale = parseFloat(new_total_end_now2_format) - parseFloat(price_delete_now3_format)
+                    var new_total_end_now1 = document.getElementById("Total_end").innerHTML.replace(',', '').replace(/[^0-9,.]*/, '').replace(',', '');
 
-                    document.getElementById("Total_end").innerHTML = delete_sale.toLocaleString("en");
+                    var delete_sale = parseFloat(new_total_end_now1) - parseFloat(price_delete_now3)
+
+                    if (delete_sale != 0) {
+                        
+                        if (!isNaN(delete_sale)) { //Cifra no es NaN
+
+                            if (!Number.isInteger(delete_sale)) {//Cifra no es entero
+
+                                //Cifras exactas $ sin digitos de ctvs
+
+                                if (delete_sale.toLocaleString("en").split(".")[1] === undefined) {
+                                    document.getElementById("Total_end").innerHTML = delete_sale.toLocaleString("en") + ".00";
+
+                                } else { //Cifras $ con digitos de ctvs
+
+                                    //Cifras con 1 digito de ctv
+
+                                    if (delete_sale.toLocaleString("en").split(".")[1].length === 1) {
+                                        document.getElementById("Total_end").innerHTML = delete_sale.toLocaleString("en") + "0";
+
+                                        //Cifras con 2 digitos de ctvs
+
+                                    } else if (delete_sale.toLocaleString("en").split(".")[1].length === 2) {
+                                        document.getElementById("Total_end").innerHTML = delete_sale.toLocaleString("en");
+                                    }
+
+                                }
+
+                            } else { //Cifra es entero
+
+                                //Tres cifras exactas $
+
+                                if (delete_sale.toString().length == 3) {
+                                    document.getElementById("Total_end").innerHTML = parseFloat(delete_sale).toFixed(2).toLocaleString("en");
+                                }
+                                //Cuatro o mas cifras exactas $
+
+                                else if (delete_sale.toString().length >= 4) {
+                                    document.getElementById("Total_end").innerHTML = delete_sale.toLocaleString("en") + ".00";
+                                }
+
+                            }
+                        }
+                    } else {
+                        document.getElementById("Total_end").innerHTML = parseFloat(delete_sale).toFixed(2).toLocaleString("en");
+                    }
 
                     table.deleteRow(rowCount-1)
                 }
@@ -334,24 +465,111 @@
                 var cant_now = parseInt(cant_now_str)
 
                 var price_update_now_str = String(rows[i].cells[3].innerHTML).replace(/ /g, "")
-                @*var price_update_now = parseFloat(price_update_now_str.split("$")[1].replace(",", "."))*@
-                var price_update_now = parseFloat(price_update_now_str.split("$")[1])
+                var price_update_now = parseFloat(price_update_now_str.split("$")[1].replace(",", "."))
+                var price_update_now_format = price_update_now.toLocaleString("en");
+                if (price_update_now_format.split(".")[1].length === 1) {
+                    document.getElementById("price_" + (i - 1)).innerHTML = "$ " + parseFloat(price_update_now_format).toFixed(2).toLocaleString("en");
+                } else {
+                    document.getElementById("price_" + (i - 1)).innerHTML = "$ " + price_update_now_format.toLocaleString("en");
+                }
+
 
                 var totalItem = cant_now * price_update_now
+
 
                 var strId2 = (i-1).toString();
 
                 if (document.getElementById(strId2) !== null) {
 
                     total_end_now += totalItem
-                    document.getElementById(strId2).innerHTML = "$ " + totalItem.toLocaleString("en");
+
+                    if (!Number.isInteger(totalItem)) {//Cifra no es entero
+
+                        if (!Number.isInteger(totalItem)) {//Cifra no es entero
+
+                            //Cifras exactas $ sin digitos de ctvs
+
+                            if (totalItem.toLocaleString("en").split(".")[1] === undefined) {
+
+                                
+                                document.getElementById(strId2).innerHTML = "$ " + totalItem.toLocaleString("en") + ".00";
+
+                            } else { //Cifras $ con digitos de ctvs
+
+                                //Cifras con 1 digito de ctv
+
+                                if (totalItem.toLocaleString("en").split(".")[1].length === 1) {
+
+                                    document.getElementById(strId2).innerHTML = "$ " + totalItem.toLocaleString("en") + "0";
+
+                                 //Cifras con 2 digitos de ctvs
+
+                                } else if (totalItem.toLocaleString("en").split(".")[1].length === 2) {
+                                    
+                                    document.getElementById(strId2).innerHTML = "$ " + totalItem.toLocaleString("en");
+                                }
+                            }
+
+                        }else { //Cifra es entero
+                           
+                            //Tres cifras exactas $
+
+                            if (totalItem.toString().length == 3) {
+                               
+                                document.getElementById(strId2).innerHTML = "$ " + parseFloat(totalItem).toFixed(2).toLocaleString("en");
+                            }
+                            //Cuatro o mas cifras exactas $
+
+                            else if (totalItem.toString().length >= 4) {
+                                
+                                document.getElementById("Total_end").innerHTML = "$ " + totalItem.toLocaleString("en") + ".00";
+                            }
+                        }
+                    }
 
                 }
 
             }
 
-            document.getElementById("Total_end").innerHTML = total_end_now.toLocaleString("en");
+            if (!isNaN(total_end_now)) { //Cifra no es NaN
 
+                if (!Number.isInteger(total_end_now)) {//Cifra no es entero
+
+                    //Cifras exactas $ sin digitos de ctvs
+
+                    if (total_end_now.toLocaleString("en").split(".")[1] === undefined) {
+                        document.getElementById("Total_end").innerHTML = total_end_now.toLocaleString("en") + ".00";
+
+                    } else { //Cifras $ con digitos de ctvs
+
+                        //Cifras con 1 digito de ctv
+
+                        if (total_end_now.toLocaleString("en").split(".")[1].length === 1) {
+                            document.getElementById("Total_end").innerHTML = total_end_now.toLocaleString("en") + "0";
+
+                        //Cifras con 2 digitos de ctvs
+
+                        } else if (total_end_now.toLocaleString("en").split(".")[1].length === 2) {
+                            document.getElementById("Total_end").innerHTML = total_end_now.toLocaleString("en");
+                        }
+
+                   }
+
+                } else { //Cifra es entero
+
+                    //Tres cifras exactas $
+
+                    if (total_end_now.toString().length == 3) {
+                        document.getElementById("Total_end").innerHTML = parseFloat(total_end_now).toFixed(2).toLocaleString("en");
+                    }
+                    //Cuatro o mas cifras exactas $
+
+                    else if (total_end_now.toString().length >= 4) {
+                        document.getElementById("Total_end").innerHTML = total_end_now.toLocaleString("en") + ".00";
+                    }
+
+                }
+            }
 
         }
 
@@ -365,19 +583,41 @@
 
             //NEW PRICE
 
-            var new_price = document.getElementById("newProduct" + rowNumber).value;
-            document.getElementById("newPrice" + rowNumber).innerHTML = "$ " + parseInt(new_price);
+            var new_price = document.getElementById("newProduct" + rowNumber).value.replace(",", ".");
+            var new_price_format = parseFloat(document.getElementById("newProduct" + rowNumber).value.replace(",", "."));
+            if (new_price_format.toString().split(".")[1].length === 1) {
+                document.getElementById("newPrice" + rowNumber).innerHTML = "$ " + parseFloat(new_price_format).toFixed(2).toLocaleString("en");
+            } else {
+                document.getElementById("newPrice" + rowNumber).innerHTML = "$ " + new_price_format.toLocaleString("en");
+            }
+            
 
             //NEW TOTAL
-            var new_total = parseInt(new_cant) * parseInt(new_price)
-            document.getElementById("totalNew" + rowNumber).innerHTML = "$ " + new_total.toLocaleString("en");
+            var new_total = parseInt(new_cant) * parseFloat(new_price)
+           
+            if (new_total.toString().split(".")[1].length === 1) {
+                document.getElementById("totalNew" + rowNumber).innerHTML = "$ " + parseFloat(new_total).toFixed(2).toLocaleString("en");
+            } else {
+                document.getElementById("totalNew" + rowNumber).innerHTML = "$ " + new_total.toLocaleString("en");
+            }
 
 
             //NEW TOTAL END
-            var new_total_end = document.getElementById("Total_end").innerHTML
-            var new_total_end_format = new_total_end.replace(/[^\d,]/g, "").replace(",", "")
 
-            document.getElementById("Total_end").innerHTML = (parseFloat(parseInt(new_total_end_format)) + new_total).toLocaleString("en");
+            var new_total_end = 0
+            var rows = document.getElementById('tablaprueba').rows;
+            for (var i = 1; i < rows.length; i++) {
+                var price_update = rows[i].cells[4].innerHTML
+                var price_update_format = price_update.replace(",", "")
+                var price_update2 = price_update_format.split("$ ")[1]
+                var price_update3 = price_update2.split("<")[0].replace(",", "")
+                console.log('price_update3 --->', price_update3)
+                new_total_end += parseFloat(price_update3)
+            }
+
+            if (!isNaN(new_total_end)) {
+                document.getElementById("Total_end").innerHTML = parseFloat(new_total_end).toLocaleString("en");
+            }
 
 
         }
@@ -392,14 +632,50 @@
 
             //NEW PRICE NOW
 
-            var new_price_now = document.getElementById("newProduct" + rowNumber).value;
+            var new_price_now = document.getElementById("newProduct" + rowNumber).value.replace(",", ".");
 
 
             //NEW TOTAL NOW
 
-            var new_total_now = parseInt(new_cant_now) * parseInt(new_price_now)
-            if (!isNaN(new_total_now)) {
-                document.getElementById("totalNew" + rowNumber).innerHTML = "$ " + new_total_now.toLocaleString("en");
+            var new_total_now = parseInt(new_cant_now) * parseFloat(new_price_now)
+            if (!isNaN(new_total_now)) { //Cifra no es NaN
+
+                if (!Number.isInteger(new_total_now)) {//Cifra no es entero
+          
+                    //Cifras exactas $ sin digitos de ctvs
+
+                    if (new_total_now.toLocaleString("en").split(".")[1] === undefined) {
+                        document.getElementById("totalNew" + rowNumber).innerHTML = "$ " + new_total_now.toLocaleString("en") + ".00";
+
+                    } else { //Cifras $ con digitos de ctvs
+
+                        //Cifras con 1 digito de ctv
+
+                        if (new_total_now.toLocaleString("en").split(".")[1].length === 1) {
+                            document.getElementById("totalNew" + rowNumber).innerHTML = "$ " + new_total_now.toLocaleString("en") + "0";
+
+                        //Cifras con 2 digitos de ctvs
+
+                        } else if (new_total_now.toLocaleString("en").split(".")[1].length === 2) {
+                            document.getElementById("totalNew" + rowNumber).innerHTML = "$ " + new_total_now.toLocaleString("en");
+                        }
+
+                    }
+
+                } else { //Cifra es entero
+
+                    //Tres cifras exactas $
+
+                    if (new_total_now.toString().length == 3) {
+                        document.getElementById("totalNew" + rowNumber).innerHTML = "$ " + parseFloat(new_total_now).toFixed(2).toLocaleString("en");
+                    }
+                    //Cuatro o mas cifras exactas $
+
+                    else if (new_total_now.toString().length >= 4) {
+                        document.getElementById("totalNew" + rowNumber).innerHTML = "$ " + new_total_now.toLocaleString("en") + ".00";
+                    }
+                    
+                }
             }
 
             //NEW TOTAL END NOW
@@ -410,13 +686,56 @@
                 var price_update_now = rows[i].cells[4].innerHTML
                 var price_update_now_format = price_update_now.replace(",", "")
                 var price_update_now2 = price_update_now_format.split("$ ")[1]
-                var price_update_now3 = price_update_now2.split("<")[0]
-                new_total_end_now += parseInt(price_update_now3)
+                var price_update_now3 = price_update_now2.split("<")[0].replace(",", "")
+                new_total_end_now += parseFloat(price_update_now3)
             }
 
             if (!isNaN(new_total_end_now)) {
-                document.getElementById("Total_end").innerHTML = parseFloat(new_total_end_now).toLocaleString("en");
+             
+                if (!Number.isInteger(new_total_end_now)) {//Cifra no es entero
+
+                    if (!Number.isInteger(new_total_end_now)) {//Cifra no es entero
+
+                        //Cifras exactas $ sin digitos de ctvs
+
+                        if (new_total_end_now.toLocaleString("en").split(".")[1] === undefined) {
+
+                            document.getElementById("Total_end").innerHTML = new_total_end_now.toLocaleString("en") + ".00";
+
+                        } else { //Cifras $ con digitos de ctvs
+
+                            //Cifras con 1 digito de ctv
+
+                            if (new_total_end_now.toLocaleString("en").split(".")[1].length === 1) {
+
+                                document.getElementById("Total_end").innerHTML = new_total_end_now.toLocaleString("en") + "0";
+
+                                //Cifras con 2 digitos de ctvs
+
+                            } else if (new_total_end_now.toLocaleString("en").split(".")[1].length === 2) {
+
+                                document.getElementById("Total_end").innerHTML = new_total_end_now.toLocaleString("en");
+                            }
+                        }
+
+                    } else { //Cifra es entero
+
+                        //Tres cifras exactas $
+
+                        if (new_total_end_now.toString().length == 3) {
+
+                            document.getElementById("Total_end").innerHTML = parseFloat(new_total_end_now).toFixed(2).toLocaleString("en");
+                        }
+                        //Cuatro o mas cifras exactas $
+
+                        else if (new_total_end_now.toString().length >= 4) {
+
+                            document.getElementById("Total_end").innerHTML = new_total_end_now.toLocaleString("en") + ".00";
+                        }
+                    }
+                }
             }
+
         }
 
     </script>
